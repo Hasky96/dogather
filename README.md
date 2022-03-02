@@ -9,11 +9,11 @@
 
 # 목차
 
-- [1.기획배경](https://github.com/haseok1020/dogather#기획배경)
-- [2.주요기능](https://github.com/haseok1020/dogather#주요기능)
-- [3.기술스택](https://github.com/haseok1020/dogather#기술스택)
-- [4.프로젝트 세팅 가이드](https://github.com/haseok1020/dogather#프로젝트Setting가이드)
-- [5.만든사람들](https://github.com/haseok1020/dogather#만든사람들)
+- [기획배경](#기획배경)
+- [주요기능](#주요기능)
+- [기술스택](#기술스택)
+- [프로젝트 세팅 가이드](#프로젝트Setting가이드)
+- [만든사람들](#만든사람들)
 
   
 
