@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.AlarmDao">
+    <select id="getAlarm" parameterType="String" resultType="com.dogather.pjtserver.dto.AlarmDto">
+        select *
+        from dogather.message
+        where user_nick = #{userNick} order by msg_no DESC
+    </select>
+
+    <insert id="insertAlarm" parameterType="list">
+        insert into dogather.message (user_Nick, msg)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userNick}, #{item.msg})
+        </foreach>
+    </insert>
+
+    <update id="readAlarm" parameterType="int">
+        update dogather.message
+           set message.read = 1
+         where msg_no = #{msgNo}
+    </update>
+</mapper>

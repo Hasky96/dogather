@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.CommentDao">
+
+    <insert id="createComment" useGeneratedKeys="true" keyProperty="commentNo">
+        insert into board_comment
+        (post_no, writer_no, comment_content, created)
+        values
+        (#{postNo}, #{writerNo}, #{commentContent}, #{created})
+    </insert>
+
+    <update id="updateComment" parameterType="com.dogather.pjtserver.dto.CommentDto">
+        update board_comment
+        set
+        comment_content = #{commentContent}
+        where
+        comment_no = #{commentNo}
+    </update>
+
+    <select id="findComment"  parameterType="int" resultType="com.dogather.pjtserver.dto.CommentDto">
+        select * from board_comment where comment_no = #{commentNo}
+    </select>
+
+    <delete id="deleteComment" parameterType="int">
+        delete from board_comment where comment_no = #{commentNo}
+    </delete>
+
+    <select id="findAllComment"  parameterType="int" resultType="com.dogather.pjtserver.dto.CommentDto">
+        select * from board_comment where post_no = #{postNo}
+    </select>
+
+
+</mapper>

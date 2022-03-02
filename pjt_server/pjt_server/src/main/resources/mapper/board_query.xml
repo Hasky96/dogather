@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.BoardDao">
+
+    <insert id="createBoard" useGeneratedKeys="true" keyProperty="postNo">
+        insert into board
+        (writer_no, board_title, board_content, created)
+        values
+        (#{writerNo}, #{boardTitle}, #{boardContent}, #{created})
+    </insert>
+
+    <select id="findBoard" parameterType="int" resultType="com.dogather.pjtserver.dto.BoardResponseDto">
+        select * from board where post_no = #{postNo}
+    </select>
+
+    <select id="findUserLikeBoard" parameterType="int" resultType="com.dogather.pjtserver.dto.BoardDto">
+        select * from board where post_no = #{postNo}
+    </select>
+
+    <update id="updateBoard" parameterType="com.dogather.pjtserver.dto.BoardResponseDto">
+        update board
+        set board_title = #{boardTitle}, board_content = #{boardContent}, updated = #{updated}
+        where post_no = #{postNo}
+    </update>
+
+<!--    <resultMap id="boardMap" type="com.dogather.pjtserver.dto.TestDto">-->
+<!--        <id column="post_no" property="postNo"/>-->
+<!--        <result column="post_no" property="postNo"/>-->
+<!--        <result column="writer_no" property="writerNo"/>-->
+<!--        <result column="board_title" property="boardTitle"/>-->
+<!--        <result column="board_content" property="boardContent"/>-->
+<!--        <result column="created" property="created"/>-->
+<!--        <result column="updated" property="updated"/>-->
+<!--        <result column="board_type" property="boardType"/>-->
+<!--        <result column="board_view" property="boardView"/>-->
+<!--        <collection property="commentList" resultMap="commentMap"/>-->
+<!--        <collection property="likeList" resultMap="likeMap"/>-->
+<!--        <collection property="mediaList" resultMap="mediaMap"/>-->
+<!--    </resultMap>-->
+
+<!--    <resultMap id="commentMap" type="com.dogather.pjtserver.dto.CommentDto">-->
+<!--        <result column="post_no" property="postNo"/>-->
+<!--        <result column="comment_no" property="commentNo"/>-->
+<!--        <result column="writer_no" property="writerNo"/>-->
+<!--        <result column="comment_content" property="commentContent"/>-->
+<!--        <result column="created" property="created"/>-->
+<!--    </resultMap>-->
+
+<!--    <resultMap id="likeMap" type="com.dogather.pjtserver.dto.LikeDto">-->
+<!--        <result column="post_no" property="postNo"/>-->
+<!--        <result column="user_no" property="userNo"/>-->
+<!--    </resultMap>-->
+
+<!--    <resultMap id="mediaMap" type="com.dogather.pjtserver.dto.BoardMediaDto">-->
+<!--        <result column="post_no" property="postNo"/>-->
+<!--        <result column="media_no" property="mediaNo"/>-->
+<!--    </resultMap>-->
+
+
+
+<!--    <select id="getAllboard" resultMap="boardMap">-->
+<!--        select b.post_no, b.writer_no, b.board_title, b.board_title, b.board_content, b.created, b.updated, b.board_type, b.board_view,-->
+<!--        c.post_no, c.comment_no, c.writer_no, c.comment_content, c.created,-->
+<!--        l.post_no, l.user_no,-->
+<!--        m.post_no, m.media_no-->
+<!--        from board b-->
+<!--        left outer join comment c-->
+<!--            on b.post_no = c.post_no-->
+<!--        left outer join likes l-->
+<!--            on b.post_no = l.post_no-->
+<!--        left outer join board_media m-->
+<!--            on b.post_no = m.post_no-->
+<!--    </select>-->
+
+
+
+    <select id="getAllboard" resultType="com.dogather.pjtserver.dto.BoardResponseDto">
+        select * from board
+    </select>
+
+    <select id="boardViewsCheck" parameterType="int" resultType="int">
+        select count(*)
+        from dogather.board_views
+        where post_no = #{postNo}
+        and user_no = #{userNo}
+    </select>
+
+    <insert id="boardViewsInsert" parameterType="int">
+        insert into dogather.board_views (post_no, user_no)
+        values (#{postNo}, #{userNo})
+    </insert>
+
+    <update id="boardViewsPlus" parameterType="int">
+        update dogather.board
+        set board_view = board_view + 1
+        where post_no = #{postNo}
+    </update>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.LikeDao">
+
+
+    <update id="updateLike" parameterType="com.dogather.pjtserver.dto.LikeDto">
+        update board_like
+        set <include refid="cal"></include>, board_title = #{boardTitle}
+        where user_no = #{userNo} and post_no = #{postNo}
+
+    </update>
+
+    <sql id = "cal">
+        <if test="likeCount == 1">
+            like_count = 0
+        </if>
+        <if test="likeCount == 0">
+            like_count = like_count + 1
+        </if>
+    </sql>
+
+    <insert id="like" parameterType="com.dogather.pjtserver.dto.LikeDto">
+        insert into board_like
+        (post_no, user_no)
+        values
+        (#{postNo}, #{userNo})
+    </insert>
+
+    <delete id="unlike" parameterType="com.dogather.pjtserver.dto.LikeDto">
+        delete from board_like
+        where post_no = #{postNo} and user_no = #{userNo}
+    </delete>
+
+    <select id="findLikeAtBoard" parameterType="int" resultType="int">
+        select user_no
+        from board_like
+        where post_no = #{postNo}
+    </select>
+
+
+    <select id="findLikeBoardByUser" parameterType="int" resultType="int">
+        select post_no
+        from board_like
+        where user_no = #{userNo}
+    </select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.FAQDao">
+
+    <insert id="createFaq" parameterType="com.dogather.pjtserver.dto.FAQDto">
+        insert into faq
+        (group_no, category_no, faq_question, faq_answer)
+        values
+        (#{groupNo}, #{categoryNo}, #{faqQuestion}, #{faqAnswer})
+    </insert>
+    
+    <update id="updateFaq" parameterType="com.dogather.pjtserver.dto.FAQDto">
+        update faq
+        set
+            faq_question = #{faqQuestion},
+            faq_answer = #{faqAnswer}
+        where
+            faq_no = #{faqNo} and group_no = #{groupNo}
+    </update>
+
+    <select id="readFaq"  parameterType="int" resultType="com.dogather.pjtserver.dto.FAQDto">
+        select * from faq  where group_no = #{groupNo} and category_no = #{categoryNo}
+    </select>
+
+    <select id="readFaqAll"  parameterType="int" resultType="com.dogather.pjtserver.dto.FAQDto">
+        select * from faq  where group_no = #{groupNo}
+    </select>
+
+    <select id="selectFaqDetail"  parameterType="int" resultType="com.dogather.pjtserver.dto.FAQDto">
+        select * from faq  where group_no = #{groupNo} and faq_no = #{faqNo}
+    </select>
+
+    <delete id="deleteFaq" parameterType="int">
+        delete from faq where group_no = #{groupNo} and faq_no = #{faqNo}
+    </delete>
+
+    <delete id="deleteFaqs" parameterType="int">
+        delete from faq where group_no = #{groupNo}
+    </delete>
+
+
+</mapper>

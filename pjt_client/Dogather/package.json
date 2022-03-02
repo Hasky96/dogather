@@ -1,0 +1,87 @@
+{
+  "name": "dogather",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.17",
+    "@mui/icons-material": "^5.4.1",
+    "@mui/material": "^5.4.1",
+    "@mui/styles": "^5.4.1",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/antd": "^1.0.0",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.22",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-slick": "^0.23.8",
+    "@types/slick-carousel": "^1.6.37",
+    "@types/styled-components": "^5.1.21",
+    "@types/swiper": "^6.0.0",
+    "antd": "^4.18.6",
+    "axios": "^0.25.0",
+    "framer-motion": "^6.2.6",
+    "iamport": "^0.3.4",
+    "jquery": "^3.6.0",
+    "jwt-decode": "^3.1.2",
+    "mdb-ui-kit": "^3.10.2",
+    "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-carousel-minimal": "^1.4.1",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.25.3",
+    "react-loader-spinner": "^5.1.0",
+    "react-material-ui-carousel": "^3.1.1",
+    "react-modal": "^3.14.4",
+    "react-query": "^3.34.14",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.0",
+    "react-slick": "^0.28.1",
+    "react-spinners": "^0.11.0",
+    "recoil": "^0.5.1",
+    "recoil-persist": "^4.0.0",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^5.3.3",
+    "sweetalert2": "^11.4.0",
+    "swiper": "^8.0.3",
+    "typescript": "^4.5.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "CI= react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.13",
+    "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/react-modal": "^3.13.1",
+    "@types/react-router-dom": "^5.3.3",
+    "iamport-typings": "^1.3.0"
+  }
+}

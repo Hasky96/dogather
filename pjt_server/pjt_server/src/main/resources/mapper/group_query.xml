@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.GroupDao">
+
+    <resultMap id="grouplistMap" type="com.dogather.pjtserver.dto.GroupReturnDto">
+        <result column="groupNo" property="group_no"/>
+        <result column="created" property="created"/>
+        <result column="updated" property="updated"/>
+        <result column="max_people" property="maxPeople"/>
+        <result column="deadline" property="deadline"/>
+        <result column="status" property="status"/>
+        <result column="product" property="product"/>
+        <result column="detail" property="detail"/>
+        <result column="link" property="link"/>
+        <result column="origin_price" property="originPrice"/>
+        <result column="price" property="price"/>
+        <result column="user_no" property="groupLeader"/>
+        <result column="user_nickname" property="leaderName"/>
+        <result column="category_no" property="categoryNo"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="count" property="count"/>
+    </resultMap>
+
+
+    <select id="getList" resultMap="grouplistMap">
+        select
+        g.group_no,
+        g.group_leader,
+        u.user_no,
+        u.user_nickname,
+        c.category_name,
+        g.category_no,
+        g.created,
+        g.updated,
+        g.deadline,
+        g.max_people,
+        g.status,
+        g.product,
+        g.detail,
+        g.link,
+        g.origin_price,
+        g.price,
+        g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group as g
+        left join dogather.user as u on g.group_leader = u.user_no
+        left join dogather.category as c on g.category_no = c.category_no
+
+    </select>
+
+    <select id="getCategoryList" resultMap="grouplistMap" parameterType="Map">
+        select
+            g.group_no,
+            g.group_leader,
+            u.user_no,
+            u.user_nickname,
+            c.category_name,
+            g.category_no,
+            g.created,
+            g.updated,
+            g.deadline,
+            g.max_people,
+            g.status,
+            g.product,
+            g.detail,
+            g.link,
+            g.origin_price,
+            g.price,
+            g.view
+        from dogather.group as g
+        left join dogather.user as u on g.group_leader = u.user_no
+        left join dogather.category as c on g.category_no = c.category_no
+        where g.category_no = #{categoryNo}
+            limit 24 offset #{page}
+    </select>
+
+    <select id="search" resultMap="grouplistMap" parameterType="Map">
+        select DISTINCT
+            g.group_no,
+            g.group_leader,
+            u.user_no,
+            u.user_nickname,
+            c.category_name,
+            g.category_no,
+            g.created,
+            g.updated,
+            g.deadline,
+            g.max_people,
+            g.status,
+            g.product,
+            g.detail,
+            g.link,
+            g.origin_price,
+            g.price,
+            g.view
+        from dogather.group as g
+                 left join dogather.user as u on g.group_leader = u.user_no
+                 left join dogather.category as c on g.category_no = c.category_no
+
+            <if test="nickname==null">
+                where
+                <foreach nullable="true" collection="words" item="word" separator="or">
+                    g.product Like Concat('%',#{word},'%') or g.detail Like Concat('%',#{word},'%')
+                </foreach>
+            </if>
+            <if test="words==null">
+                where
+                u.user_nickname=#{nickname}
+            </if>
+            limit 24 offset #{page}
+    </select>
+
+    <select id="getHotList" resultMap="grouplistMap">
+        select
+        g.group_no,
+        g.group_leader,
+        u.user_no,
+        u.user_nickname,
+        c.category_name,
+        g.category_no,
+        g.created,
+        g.updated,
+        g.deadline,
+        g.max_people,
+        g.status,
+        g.product,
+        g.detail,
+        g.link,
+        g.origin_price,
+        g.price,
+        g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group as g
+        left join dogather.user as u on g.group_leader = u.user_no
+        left join dogather.category as c on g.category_no = c.category_no
+        order by view DESC limit 4
+    </select>
+
+    <select id="getNewList" resultMap="grouplistMap">
+        select
+            g.group_no,
+            g.group_leader,
+            u.user_no,
+            u.user_nickname,
+            c.category_name,
+            g.category_no,
+            g.created,
+            g.updated,
+            g.deadline,
+            g.max_people,
+            g.status,
+            g.product,
+            g.detail,
+            g.link,
+            g.origin_price,
+            g.price,
+            g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group as g
+                 left join dogather.user as u on g.group_leader = u.user_no
+                 left join dogather.category as c on g.category_no = c.category_no
+        order by group_no DESC limit 4
+    </select>
+
+    <select id="getEndSoonList" resultMap="grouplistMap">
+        select
+            g.group_no,
+            g.group_leader,
+            u.user_no,
+            u.user_nickname,
+            c.category_name,
+            g.category_no,
+            g.created,
+            g.updated,
+            g.deadline,
+            g.max_people,
+            g.status,
+            g.product,
+            g.detail,
+            g.link,
+            g.origin_price,
+            g.price,
+            g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group as g
+                 left join dogather.user as u on g.group_leader = u.user_no
+                 left join dogather.category as c on g.category_no = c.category_no
+        where g.status="모집중" and g.deadline > now() order by g.deadline limit 4
+    </select>
+
+    <select id="getRecommendList" resultMap="grouplistMap">
+        select
+            g.group_no,
+            g.group_leader,
+            u.user_no,
+            u.user_nickname,
+            c.category_name,
+            g.category_no,
+            g.created,
+            g.updated,
+            g.deadline,
+            g.max_people,
+            g.status,
+            g.product,
+            g.detail,
+            g.link,
+            g.origin_price,
+            g.price,
+            g.view,
+            (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group as g
+            left join dogather.user as u on g.group_leader = u.user_no
+            left join dogather.category as c on g.category_no = c.category_no
+        where g.status="모집중" and g.deadline > now() and c.category_no in
+        <foreach collection="categories" item="category" open="(" close=")" separator=",">
+            #{category}
+        </foreach>
+        order by g.deadline
+    </select>
+
+
+<!--    <select id="getList" resultType="com.dogather.pjtserver.dto.GroupReturnDto">-->
+<!--        select g.group_no, g.group_leader, u.user_nickname, g.deadline, g.max_people, g.view, g.status, g.product, g.price, c.category_no, c.category_name-->
+<!--        from dogather.group AS g-->
+<!--        left join category as c on g.category_no = c.category_no-->
+<!--        left join user as u on u.user_no = g.group_leader-->
+<!--    </select>-->
+
+
+    <select id="getMainImage" parameterType="int" resultType="Integer">
+<!--        select ifnull (max(media_savename), 'no')-->
+<!--        from dogather.group_media as g-->
+<!--        where g.group_no = #{groupNo} and g.mainImageYn='Y'-->
+
+        select media_no
+        from dogather.group_media as g
+        where g.group_no = #{groupNo} and g.mainImageYn='Y'
+    </select>
+
+    <insert id="groupRegister" parameterType="com.dogather.pjtserver.dto.GroupDto">
+        insert into dogather.group (group_leader, category_no, deadline, max_people, status, product, detail, link, origin_price, price)
+        values (#{groupLeader}, #{categoryNo}, date_format(#{deadline}, "%Y-%m-%d %H:%i:%s") , #{maxPeople}, #{status}, #{product}, #{detail}, #{link}, #{originPrice}, #{price})
+        <selectKey keyProperty="groupNo" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="groupUpdate" parameterType="com.dogather.pjtserver.dto.GroupDto">
+        update dogather.group
+        set product = #{product}, detail = #{detail}, link = #{link}, origin_price = #{originPrice}, price = #{price}, updated = current_timestamp(), deadline = #{deadline}, max_people = #{maxPeople}, status = #{status}
+        where group_no = #{groupNo}
+    </update>
+
+    <delete id="groupDelete" parameterType="int">
+        delete from dogather.group
+        where group_no = #{groupNo}
+    </delete>
+
+<!--    <select id="group" parameterType="int" resultType="com.dogather.pjtserver.dto.GroupReturnDto">-->
+<!--        select-->
+<!--            g.group_no = #{groupNo},-->
+<!--            g.group_leader = #{groupLeader},-->
+<!--            u.user_nickname = #{groupLeaderNick},-->
+<!--&lt;!&ndash;            c.category_name = #{categoryName},&ndash;&gt;-->
+<!--            g.category_no = #{categoryNo},-->
+<!--            g.created = #{created},-->
+<!--            g.updated = #{updated},-->
+<!--            g.deadline = #{deadline},-->
+<!--            g.max_people = #{maxPeople},-->
+<!--            g.status = #{status},-->
+<!--            g.product = #{product},-->
+<!--            g.detail = #{detail},-->
+<!--            g.link = #{link},-->
+<!--            g.origin_price = #{originPrice},-->
+<!--            g.price = #{price}-->
+<!--        from dogather.group as g-->
+<!--        left join dogather.user as u on g.group_leader = u.user_no-->
+<!--&lt;!&ndash;        left join dogather.category as c on g.category_no = c.category_no&ndash;&gt;-->
+<!--        where group_no = #{groupNo}-->
+<!--    </select>-->
+    <resultMap id="groupMap" type="com.dogather.pjtserver.dto.GroupReturnDto">
+        <id column="group_no" property="groupNo"/>
+        <result column="created" property="created"/>
+        <result column="updated" property="updated"/>
+        <result column="max_people" property="maxPeople"/>
+        <result column="deadline" property="deadline"/>
+        <result column="status" property="status"/>
+        <result column="product" property="product"/>
+        <result column="detail" property="detail"/>
+        <result column="link" property="link"/>
+        <result column="origin_price" property="originPrice"/>
+        <result column="price" property="price"/>
+        <result column="user_no" property="groupLeader"/>
+        <result column="user_nickname" property="leaderName"/>
+        <result column="category_no" property="categoryNo"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="count" property="count"/>
+    </resultMap>
+
+    <select id="group" parameterType="int" resultMap="groupMap">
+        select
+        g.group_no,
+        g.group_leader,
+        u.user_no,
+        u.user_nickname,
+        c.category_name,
+        g.category_no,
+        g.created,
+        g.updated,
+        g.deadline,
+        g.max_people,
+        g.status,
+        g.product,
+        g.detail,
+        g.link,
+        g.origin_price,
+        g.price,
+        g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = #{groupNo}) as count
+        from dogather.group as g
+        left join dogather.user as u on g.group_leader = u.user_no
+        left join dogather.category as c on g.category_no = c.category_no
+        where group_no = #{groupNo}
+    </select>
+
+    <update id="updateOption" parameterType="Map">
+        update dogather.option
+        set
+            option_name = #{optionName},
+            option_price = #{optionPrice}
+        where
+            option_no = #{optionNo} and group_no = #{groupNo}
+    </update>
+
+
+
+    <insert id="groupEnter" parameterType="com.dogather.pjtserver.dto.GroupEnterDto">
+        insert into dogather.user_group (user_no, group_no, group_leader, product_no)
+        values (#{userNo}, #{groupNo}, #{groupLeader}, #{productNo})
+    </insert>
+
+    <delete id="groupOut" parameterType="com.dogather.pjtserver.dto.GroupEnterDto">
+        delete from dogather.user_group
+        where user_no = #{userNo}
+          and group_leader = #{groupLeader}
+          and group_no = #{groupNo}
+          and product_no = #{productNo}
+    </delete>
+
+    <insert id="addInterest" parameterType="com.dogather.pjtserver.dto.GroupInterestDto">
+        insert into user_group_interest (user_no, group_no)
+        values (#{userNo}, #{groupNo})
+    </insert>
+
+    <select id="interestlist" parameterType="int" resultType="com.dogather.pjtserver.dto.GroupInterestDto">
+        select user_no, group_no from dogather.user_interest where user_no = #{userNo}
+    </select>
+
+    <select id="getOptions" resultType="com.dogather.pjtserver.dto.OptionDto">
+        select option_no, option_name, option_price from dogather.option where group_no = #{groupNo}
+    </select>
+
+    <insert id="addOption" parameterType="Map">
+        insert into dogather.option (group_no, option_name, option_price)
+        values (#{groupNo}, #{optionName}, #{optionPrice})
+    </insert>
+
+    <select id="categoryList" parameterType="int" resultMap="grouplistMap">
+        select g.group_no, u.user_no, u.user_nickname, g.deadline, g.created, g.updated, g.detail, g.link, g.max_people, g.view, g.status, g.product, g.price, c.category_no, c.category_name,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group AS g
+        left join category as c on g.category_no = c.category_no
+        left join dogather.user as u on g.group_leader = u.user_no
+        where g.category_no = #{categoryNo}
+    </select>
+
+    <select id="wordSearch" parameterType="List" resultType="com.dogather.pjtserver.dto.GroupReturnDto">
+        select g.group_no, u.user_no, u.user_nickname, g.deadline, g.created, g.updated, g.detail, g.link, g.max_people, g.view, g.status, g.product, g.price, c.category_no, c.category_name,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group AS g
+        left join category as c on g.category_no = c.category_no
+        left join dogather.user as u on g.group_leader = u.user_no
+        where
+        <foreach collection="wordList" item="word" separator="or">
+            g.product Like Concat('%',#{word},'%') or g.detail Like Concat('%',#{word},'%')
+        </foreach>
+    </select>
+
+
+    <select id="personSearch" parameterType="String" resultType="com.dogather.pjtserver.dto.GroupReturnDto">
+        select group_no, group_leader, deadline, max_people, g.view, g.status, product, price, c.category_no, c.category_name
+        from dogather.group AS g
+        left join category as c on g.category_no = c.category_no
+        where group_leader = (select user_no from dogather.user where user_nickname = #{person})
+    </select>
+
+    <insert id="review" parameterType="com.dogather.pjtserver.dto.ReviewDto">
+        insert into dogather.review (user_from, user_to, star, content)
+        values (#{userFrom}, #{userTo}, #{star}, #{content})
+    </insert>
+
+    <select id="reviewAvg" parameterType="int" resultType="double">
+        select ifnull(avg(star), -1) from dogather.review where user_to = #{userNo}
+    </select>
+
+    <select id="findLikeGroupByUser" parameterType="int" resultType="int">
+        select group_no
+        from user_group_interest
+        where user_no = #{userNo}
+        order by group_no desc;
+    </select>
+
+    <resultMap id="paymentGroupMap" type="com.dogather.pjtserver.dto.GroupSummaryDto">
+        <id column="group_no" property="groupNo"/>
+        <result column="created" property="created"/>
+        <result column="updated" property="updated"/>
+        <result column="max_people" property="maxPeople"/>
+        <result column="deadline" property="deadline"/>
+        <result column="status" property="status"/>
+        <result column="product" property="product"/>
+        <result column="detail" property="detail"/>
+        <result column="link" property="link"/>
+        <result column="origin_price" property="originPrice"/>
+        <result column="price" property="price"/>
+        <result column="user_no" property="groupLeader"/>
+        <result column="user_nickname" property="leaderName"/>
+        <result column="category_no" property="categoryNo"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="count" property="count"/>
+        <collection property="resultPaymentDtos" ofType="com.dogather.pjtserver.dto.ResultPaymentDto">
+            <result column="option_name" property="optionName"/>
+            <result column="amount" property="amount"/>
+            <result column="amount_of_price" property="amountOfPrice"/>
+        </collection>
+    </resultMap>
+
+    <select id="findPaymentGroup" parameterType="int" resultMap="paymentGroupMap">
+        select
+        g.group_no,
+        g.group_leader,
+        u.user_no,
+        u.user_nickname,
+        c.category_name,
+        p.amount,
+        p.amount_of_price,
+        o.option_name,
+        p.amount_of_price,
+        g.category_no,
+        g.created,
+        g.updated,
+        g.deadline,
+        g.max_people,
+        g.status,
+        g.product,
+        g.detail,
+        g.link,
+        g.origin_price,
+        g.price,
+        g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = p.group_no) as count
+        from dogather.payment as p
+        left join dogather.group as g on g.group_no = p.group_no
+        left join dogather.option as o on p.option_no = o.option_no
+        left join dogather.category as c on g.category_no = c.category_no
+        left join dogather.user as u on u.user_no = g.group_leader
+        where p.user_no = #{userNo}
+        order by group_no desc;
+    </select>
+
+
+    <select id="findSaleGroup" parameterType="int" resultMap="grouplistMap">
+        select
+        g.group_no,
+        g.group_leader,
+        u.user_no,
+        u.user_nickname,
+        c.category_name,
+        g.category_no,
+        g.created,
+        g.updated,
+        g.deadline,
+        g.max_people,
+        g.status,
+        g.product,
+        g.detail,
+        g.link,
+        g.origin_price,
+        g.price,
+        g.view,
+        (SELECT count(distinct user_no) from dogather.payment where group_no = g.group_no) as count
+        from dogather.group as g
+        left join dogather.user as u on g.group_leader = u.user_no
+        left join dogather.category as c on g.category_no = c.category_no
+        where g.group_leader = #{userNo}
+        order by group_no desc;
+    </select>
+
+    <select id="reviewList" parameterType="int" resultType="com.dogather.pjtserver.dto.ReviewDto">
+        select *
+          from dogather.review
+         where user_to = #{userNo}
+    </select>
+
+    <insert id="groupViewsInsert" parameterType="int">
+        insert into dogather.group_views (group_no, user_no)
+        values (#{groupNo}, #{userNo})
+    </insert>
+
+    <select id="groupViewsCheck" parameterType="int" resultType="int">
+        select count(*)
+        from dogather.group_views
+        where group_no = #{groupNo}
+          and user_no = #{userNo}
+    </select>
+
+    <update id="groupViewsPlus" parameterType="int">
+        update dogather.group
+           set view = view + 1
+         where group_no = #{groupNo}
+    </update>
+
+    <delete id="deleteOptions" parameterType="int">
+        delete from dogather.option where group_no = #{groupNo}
+    </delete>
+
+    <select id="isliked" parameterType="int" resultType="integer">
+        select user_no
+        from user_group_interest
+        where user_no = #{userNo} and group_no = #{groupNo}
+    </select>
+
+</mapper>

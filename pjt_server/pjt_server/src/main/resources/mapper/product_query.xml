@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.ProductDao">
+
+    <select id="products" parameterType="int" resultType="com.dogather.pjtserver.dto.ProductDto">
+        select * from product where group_no = #{groupNo}
+    </select>
+
+    <insert id="register" parameterType="com.dogather.pjtserver.dto.ProductDto">
+        insert into product (group_no, product_name, product_detail, product_link, product_original_price, product_price)
+        values (#{groupNo}, #{productName}, #{productDetail}, #{productLink}, #{productOriginalPrice}, #{productPrice})
+    </insert>
+
+    <update id="update" parameterType="com.dogather.pjtserver.dto.ProductDto">
+        update product
+        set product_name = #{productName}, product_detail = #{productDetail}, product_link = #{productLink}, product_original_price = #{productOriginalPrice}, product_price = #{productPrice}
+        where product_no = #{productNo}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from product
+        where product_no = #{productNo}
+    </delete>
+
+    <select id="getProduct" parameterType="int" resultType="com.dogather.pjtserver.dto.ProductDto">
+        select * from product
+        where product_no = #{productNo}
+    </select>
+
+    <insert id="addPriceHistory" parameterType="com.dogather.pjtserver.dto.ProductDto">
+        insert into product_price (product_no, group_no, change_price)
+        values (#{productNo}, #{groupNo}, #{productPrice})
+    </insert>
+    
+    <insert id="setOption" parameterType="com.dogather.pjtserver.dto.ProductOptionDto">
+        insert into product_option (product_no, option_name, option_price)
+        value (#{productNo}, #{optionName}, #{optionPrice})
+    </insert>
+
+</mapper>

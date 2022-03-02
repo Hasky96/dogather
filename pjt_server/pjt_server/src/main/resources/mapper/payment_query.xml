@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.PaymentDao">
+
+    <insert id="payment" parameterType="list">
+        insert into dogather.payment
+        (user_no, group_no, option_no, amount, amount_of_price)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.userNo},
+            #{item.groupNo},
+            #{item.optionNo},
+            #{item.amount},
+            #{item.price}
+            )
+        </foreach>
+    </insert>
+</mapper>

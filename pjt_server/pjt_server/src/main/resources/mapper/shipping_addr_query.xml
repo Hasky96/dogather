@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.ShippingAddrDao">
+
+    <insert id="addShippingAddr" parameterType="com.dogather.pjtserver.dto.ShippingAddrDto">
+        insert into dogather.shipping_address (user_no, title, receiver, address1, address2, zip, tel)
+        values (#{userNo}, #{title}, #{receiver}, #{address1}, #{address2}, #{zip}, #{tel} )
+    </insert>
+
+    <update id="editShippingAddr" parameterType="com.dogather.pjtserver.dto.ShippingAddrDto">
+        update dogather.shipping_address
+        set title = #{title}, receiver=#{receiver}, address1=#{address1}, address2=#{address2}, zip=#{zip}, tel=#{tel}
+        where addr_no = #{addrNo}
+    </update>
+
+    <select id="getShippingAddr" parameterType="int" resultType="com.dogather.pjtserver.dto.ShippingAddrDto">
+        select * from dogather.shipping_address where addr_no = #{addrNo}
+    </select>
+
+    <delete id="deleteShippingAddr" parameterType="int">
+        delete from dogather.shipping_address where addr_no = #{addrNo}
+    </delete>
+
+    <select id="addrList" parameterType="int" resultType="com.dogather.pjtserver.dto.ShippingAddrDto">
+        select * from dogather.shipping_address where user_no = #{userNo}
+    </select>
+
+</mapper>

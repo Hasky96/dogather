@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.GroupMediaDao">
+
+    <insert id="insertMedia" parameterType="list">
+        insert into group_media
+        (media_no, group_no, media_title, media_savename, media_filesize, insert_date, mainImageYn)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.mediaNo},
+            #{item.groupNo},
+            #{item.mediaTitle},
+            #{item.mediaSavename},
+            #{item.mediaFilesize},
+            #{item.insertDate},
+            #{item.mainImageYn}
+            )
+        </foreach>
+    </insert>
+
+    <select id="findAllMedia" parameterType="int" resultType="com.dogather.pjtserver.dto.GroupMediaDto">
+        select * from group_media where group_no = #{groupNo}
+    </select>
+
+<!--    <select id="findMedia" parameterType="int" resultType="com.dogather.pjtserver.dto.BoardMediaDto">-->
+<!--        select * from board_media where media_no = #{mediaNo}-->
+<!--    </select>-->
+
+    <delete id="deleteMedia" parameterType="int">
+        delete from group_media
+        where media_no = #{mediaNo}
+    </delete>
+
+    <select id="findMedia" parameterType="int" resultType="com.dogather.pjtserver.dto.GroupMediaDto">
+        select * from group_media where media_no = #{mediaNo}
+    </select>
+
+</mapper>

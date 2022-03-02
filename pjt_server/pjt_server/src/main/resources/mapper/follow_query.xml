@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dogather.pjtserver.dao.FollowDao">
+    <insert id="follow" parameterType="com.dogather.pjtserver.dto.FollowDto">
+        insert into dogather.follow (user_from, user_to)
+        values (#{userFrom}, #{userTo})
+    </insert>
+
+    <delete id="unfollow" parameterType="com.dogather.pjtserver.dto.FollowDto">
+        delete from dogather.follow
+         where user_from = #{userFrom}
+           and user_to = #{userTo}
+    </delete>
+
+    <select id="followList" parameterType="int" resultType="com.dogather.pjtserver.dto.FollowDto">
+        select *
+          from dogather.follow
+         where user_from = #{userNo}
+            or user_to = #{userNo}
+    </select>
+</mapper>
