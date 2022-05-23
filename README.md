@@ -233,12 +233,6 @@ sudo systemctl enable docker && service docker start
 sudo service docker status
 ```
 
-### MySQL 도커 설치 및 컨테이너 실행
-
-```
-
-```
-
 ### 프로젝트 실행
 
 ```
